@@ -60,6 +60,7 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
             ESPparameters['instance'] = command['instance']['value']
             # {"instance": "1", "state": "open", "query":"?"}
             # {"instance": "both", "state": "close", "query":"cmd"}
+            # {"instance": "both", "state": "henning", "query":"cmd"}
 
 
             # # send command to ESP over websocket
