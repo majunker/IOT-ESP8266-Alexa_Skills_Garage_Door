@@ -57,6 +57,9 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
             if 'runterfahren' in command['state']['value']:
                 command['state']['value'] = 'runterfahren'
                 ESPparameters['state'] = command['state']['value']
+            elif 'runter' in command['state']['value']:
+                command['state']['value'] = 'runterfahren'
+                ESPparameters['state'] = command['state']['value']
             elif 'hochfahren' in command['state']['value']:
                 ESPparameters['state'] = command['state']['value']
                 
