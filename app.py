@@ -54,13 +54,12 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
            #     ESPparameters['state'] = command['state']['value']
         #    elif 'hochfahren' in command['state']['value']:
           #      ESPparameters['state'] = command['state']['value']
-            if 'runterfahren' in command['state']['value']:
+            if ('runterfahren' in command['state']['value']) or ('runter' in command['state']['value']) :
                 command['state']['value'] = 'runterfahren'
                 ESPparameters['state'] = command['state']['value']
-            elif 'runter' in command['state']['value']:
-                command['state']['value'] = 'runterfahren'
-                ESPparameters['state'] = command['state']['value']
+            
             elif 'hochfahren' in command['state']['value']:
+                command['state']['value'] = 'hochfahren'
                 ESPparameters['state'] = command['state']['value']
                 
         #         elif 'schliesse' in command['state']['value']:
