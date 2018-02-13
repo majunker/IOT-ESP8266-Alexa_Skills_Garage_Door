@@ -13,7 +13,7 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
             method, path, version = request_line[:-2].decode().split(None, 2)
             #websockets.accept()
         except Exception as e:
-           # print(e.args)
+            print(e.args)
             self.writer.close()
             self.ws_server.unregister(self)
 
@@ -101,11 +101,7 @@ def updateData(data):
 
 async def ws_handler(websocket, path):
     game_name = 'g1'
-    try:
-        with open('data.json') as data_file: 
-            #neu
-            data = json.load(data_file)
-            #neu
+    try:      
         HttpWSSProtocol.rwebsocket = websocket
         await websocket.send(data)
         data ='{"empty":"empty"}'
