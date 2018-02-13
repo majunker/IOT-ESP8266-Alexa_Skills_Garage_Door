@@ -76,6 +76,7 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
             # {"instance": "both", "state": "henning", "query":"cmd"}
 
 
+         
             # # send command to ESP over websocket
             if self.rwebsocket== None:
                 print("Device is not connected!")
@@ -98,12 +99,11 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
 def updateData(data):
     HttpWSSProtocol.rddata = data
 
-
 async def ws_handler(websocket, path):
     game_name = 'g1'
-    try:      
+    try:
         HttpWSSProtocol.rwebsocket = websocket
-        await websocket.send(data)
+        await websocket.send(json.dumps({'event': 'OK'}))
         data ='{"empty":"empty"}'
         while True:
             data = await websocket.recv()
@@ -111,7 +111,8 @@ async def ws_handler(websocket, path):
     except Exception as e:
         print(e)
     finally:
-print("")
+        print("")
+
 
 
 port = int(os.getenv('PORT', 80))#5687
