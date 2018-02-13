@@ -13,7 +13,7 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
             method, path, version = request_line[:-2].decode().split(None, 2)
             #websockets.accept()
         except Exception as e:
-            print(e.args)
+           # print(e.args)
             self.writer.close()
             self.ws_server.unregister(self)
 
@@ -98,11 +98,16 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
 def updateData(data):
     HttpWSSProtocol.rddata = data
 
+
 async def ws_handler(websocket, path):
     game_name = 'g1'
     try:
+        with open('data.json') as data_file: 
+            #neu
+            data = json.load(data_file)
+            #neu
         HttpWSSProtocol.rwebsocket = websocket
-        await websocket.send(json.dumps({'event': 'OK'}))
+        await websocket.send(data)
         data ='{"empty":"empty"}'
         while True:
             data = await websocket.recv()
@@ -110,9 +115,34 @@ async def ws_handler(websocket, path):
     except Exception as e:
         print(e)
     finally:
-        print("")
+print("")
 
+def _read_ready(self):
+    if self._conn_lost:
+        return
+    try:
+        time.sleep(.10)
+        data = self._sock.recv(self.max_size)
+    except (BlockingIOError, InterruptedError):
+        pass
+    except Exception as exc:
+        self._fatal_error(exc, 'Fatal read error on socket transport')
+    else:
+        if data:
+            self._protocol.data_received(data)
+        else:
+            if self._loop.get_debug():
+                print("%r received EOF")
+            keep_open = self._protocol.eof_received()
+            if keep_open:
+                # We're keeping the connection open so the
+                # protocol can write more, but we still can't
+                # receive more, so remove the reader callback.
+                self._loop._remove_reader(self._sock_fd)
+            else:
+                self.close()
 
+asyncio.selector_events._SelectorSocketTransport._read_ready = _read_ready
 
 port = int(os.getenv('PORT', 80))#5687
 start_server = websockets.serve(ws_handler, '', port, klass=HttpWSSProtocol)
